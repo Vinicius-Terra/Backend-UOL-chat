@@ -79,44 +79,6 @@ app.get('/participants', async (req, res) => {
   }
 });
 
-app.put('/products/:id', async (req, res) => {
-  const id = req.params.id;
-  const validation = productsSchema.validate(req.body);
-
-  if (validation.error) {
-    console.log(validation.error.details);
-    res.send(validation.error.details);
-    return;
-  }
-
-  try {
-    const product = await db.collection('products').findOne({ _id: new ObjectId(id) })
-    if (!product) {
-      return res.sendStatus(404);
-    }
-
-    await db.collection('products').updateOne({ _id: product._id }, { $set: req.body });
-
-    res.send(product);
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
-});
-
-app.delete('/products/:id', async (req, res) => {
-  const id = req.params.id;
-
-  try {
-    await db.collection('products').deleteOne({ _id: new ObjectId(id) })
-
-    res.sendStatus(200);
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
-});
-
 
 /* Messages Routes */
 app.post('/messages', async (req, res) => {
